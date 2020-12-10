@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/url"
 	"os"
+	"strings"
 )
 
 func ReadAllString(reader io.Reader) string {
@@ -27,4 +28,19 @@ func FullPath(u url.URL) string {
 	} else {
 		return u.Path[1:]
 	}
+}
+
+func UrlRawString(u *url.URL) string {
+	var buf strings.Builder
+
+	buf.WriteString(u.Scheme)
+	buf.WriteString("://")
+	buf.WriteString(u.Host)
+	buf.WriteString(u.Path)
+	if u.RawQuery != "" {
+		buf.WriteByte('?')
+		buf.WriteString(u.RawQuery)
+	}
+
+	return buf.String()
 }

@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"regexp"
+	"rvdl/pkg/util"
 	"strings"
 )
 
@@ -105,5 +106,5 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	_, _ = s.ChannelMessageSend(m.ChannelID, res.Request.URL.String())
+	_, _ = s.ChannelMessageSend(m.ChannelID, util.UrlRawString(res.Request.URL))
 }

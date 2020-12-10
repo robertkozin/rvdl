@@ -51,10 +51,10 @@ func ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 func home(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Cache-Control", "public, max-age=86400")
-	if req.URL.Host != "redditvideodownload.com" {
-		redirect(res, req, "https://redditvideodownload.com/", http.StatusFound)
-		return
-	}
+	//if req.URL.Host != "redditvideodownload.com" {
+	//	redirect(res, req, "https://redditvideodownload.com/", http.StatusFound)
+	//	return
+	//}
 	res.Header().Set("Content-Type", "text/plain")
 	http.ServeFile(res, req, "web/static/index.txt")
 }

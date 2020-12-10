@@ -1,0 +1,6 @@
+.idea/
+certs/*
+web/static/videos/*
+cache/*
+
+!**/.keep

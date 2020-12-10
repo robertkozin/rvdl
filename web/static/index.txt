@@ -1,0 +1,24 @@
+Reddit Video Direct Link (rvdl)
+
+Get a direct mp4 link to any video hosted on reddit. All you have to do is
+Replace reddit with rvdl in the domain.
+
+www.reddit.com/r/aww/comments/de251y/big_cats_are_just_big_cats/
+    ------
+      |
+      v
+    ----
+www.rvdl.com/r/aww/comments/de251y/big_cats_are_just_big_cats/
+
+All of Reddits short link formats are also supported along with old 
+and www subdomain
+    old.rvdl.com/r/aww/comments/de251y/big_cats_are_just_big_cats/
+    rvdl.com/r/aww/comments/de251y/
+    www.rvdl.com/comments/de251y/
+    www.rvdl.com/de251y/
+    rvdl.it/de251y/
+    v.rvdl.it/9f185snkqwq31
+
+You can also add ".mp4" to the end of any link to make the embedded video
+player show up in discord or any other platform
+    www.rvdl.com/r/aww/comments/de251y/big_cats_are_just_big_cats/.mp4

@@ -10,7 +10,7 @@ type PublicClient struct {
 	UserAgent string
 }
 
-func NewPublicClient(userAgent string) *PublicClient {
+func NewPublicClient(userAgent string) Client {
 	client := &PublicClient{UserAgent: userAgent}
 	return client
 }

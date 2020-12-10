@@ -21,7 +21,7 @@ type PrivateClient struct {
 	accessToken  string
 }
 
-func NewPrivateClient(clientId string, clientSecret string, username string, password string, userAgent string) (*PrivateClient, error) {
+func NewPrivateClient(clientId string, clientSecret string, username string, password string, userAgent string) (Client, error) {
 	client := &PrivateClient{clientId: clientId, clientSecret: clientSecret, Username: username, password: password, UserAgent: userAgent}
 
 	client.refresh()

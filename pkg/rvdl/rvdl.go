@@ -23,17 +23,19 @@ var UserAgent = util.EnvString("RVDL_USER_AGENT", "rvdl")
 
 var urlToInfoCache *cache.LRU
 var idToInfoCache *cache.Cache
-var redditClient *reddit.PrivateClient
+var redditClient reddit.Client
 
 func Init() error {
 	var err error
 
-	redditClient, err = reddit.NewPrivateClient(RedditClientId, RedditClientSecret, RedditUsername, RedditPassword, UserAgent)
-	if err != nil {
-		return err
+	if RedditClientId != "" && RedditClientSecret != "" && RedditUsername != "" && RedditPassword != "" {
+		redditClient, err = reddit.NewPrivateClient(RedditClientId, RedditClientSecret, RedditUsername, RedditPassword, UserAgent)
+		if err != nil {
+			return err
+		}
+	} else {
+		redditClient = reddit.NewPublicClient(UserAgent)
 	}
-
-	//redditClient = reddit.NewPublicClient(UserAgent)
 
 	urlToInfoCache = cache.NewLru(100)
 	idToInfoCache = cache.NewCache(100, CacheDir + "id_to_info")

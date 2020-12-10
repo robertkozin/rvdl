@@ -1,7 +1,6 @@
 package rvdl
 
 import (
-	"errors"
 	"net/http"
 	"strings"
 	"sync"
@@ -52,16 +51,17 @@ func InfoFromId(id *VideoId) (*VideoInfo, error) {
 }
 
 func FromPost(id *VideoId) (*VideoInfo, error) {
-	p, err := GetPostFromId(id)
-	if err != nil {
-		return nil, err
-	}
-
 	info := &VideoInfo{
 		VideoId:   id,
-		Permalink: "https://www." + Domain + strings.TrimSuffix(p.Permalink, "/") + ".mp4",
 		VideoType: VideoTypeNone,
 	}
+
+	p, err := GetPostFromId(id)
+	if err != nil {
+		return info, nil
+	}
+
+	info.Permalink = "https://www." + Domain + strings.TrimSuffix(p.Permalink, "/") + ".mp4"
 
 	if p.Media.RedditVideo.DashUrl != "" {
 		info.VideoType = VideoTypeDash
@@ -80,7 +80,7 @@ func FromPost(id *VideoId) (*VideoInfo, error) {
 	//}
 
 	if info.VideoType == VideoTypeDash && info.VideoUrl == "" {
-		return nil, errors.New("") // TODO
+		info.VideoType = VideoIdNone
 	}
 
 	return info, nil
@@ -89,14 +89,18 @@ func FromPost(id *VideoId) (*VideoInfo, error) {
 func FromVideo(id *VideoId) (*VideoInfo, error) {
 	info := &VideoInfo{
 		VideoId:   id,
-		Permalink: "https://v." + ShortDomain + "/" + id.Id + ".mp4",
-		VideoType: VideoTypeDash,
+		VideoType: VideoTypeNone,
 	}
 
-	info.VideoUrl, info.AudioUrl = VideoAudioFromMpd("https://v.redd.it/" + id.Id + "/DASHPlaylist.mpd")
-	if info.VideoUrl == "" {
-		return nil, errors.New("") //TODO
+	videoUrl, audioUrl := VideoAudioFromMpd("https://v.redd.it/" + id.Id + "/DASHPlaylist.mpd")
+	if videoUrl == "" {
+		return info, nil
 	}
+
+	info.Permalink = "https://v." + ShortDomain + "/" + id.Id + ".mp4"
+	info.VideoType = VideoTypeDash
+	info.VideoUrl = videoUrl
+	info.AudioUrl = audioUrl
 
 	return info, nil
 }
@@ -104,14 +108,19 @@ func FromVideo(id *VideoId) (*VideoInfo, error) {
 func FromGif(id *VideoId) (*VideoInfo, error) {
 	info := &VideoInfo{
 		VideoId:   id,
-		Permalink: "https://i." + ShortDomain + "/" + id.Id + ".mp4",
-		VideoType: VideoTypeGif,
-		VideoUrl:  "https://i.redd.it/" + id.Id + ".gif",
+		VideoType: VideoTypeNone,
 	}
 
-	if res, err := http.Head(info.VideoUrl); err != nil || res.StatusCode != http.StatusOK || res.Header.Get("Content-Type") != "image/gif" {
-		return nil, errors.New("") //TODO
+	videoUrl := "https://i.redd.it/" + id.Id + ".gif"
+
+	if res, err := http.Head(videoUrl); err != nil || res.StatusCode != http.StatusOK || res.Header.Get("Content-Type") != "image/gif" {
+		return info, nil
 	}
+
+	info.VideoId = id
+	info.Permalink = "https://i." + ShortDomain + "/" + id.Id + ".mp4"
+	info.VideoType = VideoTypeGif
+	info.VideoUrl = videoUrl
 
 	return info, nil
 }

@@ -29,6 +29,12 @@ func ProcessUrl(u url.URL) string {
 func handleRvdl(res http.ResponseWriter, req *http.Request) {
 
 	u := ProcessUrl(*req.URL)
+	// TODO: Temp fix. Think about the proper solution a little more.
+	// I should probably store the encoded permalink instead.
+	reqUrl := "https://" + req.URL.Host + req.URL.Path
+	if req.URL.RawQuery != "" {
+		reqUrl += "?" + req.URL.RawQuery
+	}
 
 	id := rvdl.FindIdCache(u)
 	if id.IdType == rvdl.VideoIdNone {
@@ -47,7 +53,7 @@ func handleRvdl(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if info.Permalink != req.URL.String() {
+	if info.Permalink != reqUrl {
 		redirect(res, req, info.Permalink, http.StatusFound)
 		// TODO: maybe start download
 		return

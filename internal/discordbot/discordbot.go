@@ -90,25 +90,27 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	req, err := http.NewRequest("GET", "https://www.rvdl.com/"+link, nil)
-	if err != nil {
-		return
-	}
+	go func() {
+		req, err := http.NewRequest("GET", "https://www.rvdl.com/"+link, nil)
+		if err != nil {
+			return
+		}
 
-	req.Header.Set("If-Modified-Since", ifModifiedSince)
-	req.Header.Set("User-Agent", userAgent)
+		req.Header.Set("If-Modified-Since", ifModifiedSince)
+		req.Header.Set("User-Agent", userAgent)
 
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return
-	}
+		res, err := http.DefaultClient.Do(req)
+		if err != nil {
+			return
+		}
 
-	_, _ = io.Copy(ioutil.Discard, res.Body)
-	_ = res.Body.Close()
+		_, _ = io.Copy(ioutil.Discard, res.Body)
+		_ = res.Body.Close()
 
-	if (res.StatusCode != http.StatusOK && res.StatusCode != http.StatusNotModified) || res.Header.Get("Content-Type") != "video/mp4" {
-		return
-	}
+		if (res.StatusCode != http.StatusOK && res.StatusCode != http.StatusNotModified) || res.Header.Get("Content-Type") != "video/mp4" {
+			return
+		}
 
-	_, _ = s.ChannelMessageSend(m.ChannelID, util.UrlRawString(res.Request.URL))
+		_, _ = s.ChannelMessageSend(m.ChannelID, util.UrlRawString(res.Request.URL))
+	}()
 }

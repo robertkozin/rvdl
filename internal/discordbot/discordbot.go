@@ -86,6 +86,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	link := redditLink.FindString(m.Content)
 
+	if strings.Contains(link, ".png") || strings.Contains(link, ".gif") || strings.Contains(link, ".jpg") {
+		return
+	}
+
 	req, err := http.NewRequest("GET", "https://www.rvdl.com/"+link, nil)
 	if err != nil {
 		return

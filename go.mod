@@ -1,4 +1,4 @@
-module rvdl
+module github.com/robertkozin/rvdl
 
 go 1.15
 

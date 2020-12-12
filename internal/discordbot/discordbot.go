@@ -2,11 +2,11 @@ package discordbot
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"github.com/robertkozin/rvdl/pkg/util"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"regexp"
-	"rvdl/pkg/util"
 	"strings"
 )
 

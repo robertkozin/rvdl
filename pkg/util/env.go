@@ -5,23 +5,23 @@ import (
 	"strconv"
 )
 
-func EnvString(key string, def string) string {
-	env, ok := os.LookupEnv(key)
+func EnvString(key string, val string) string {
+	val, ok := os.LookupEnv(key)
 	if !ok {
-		return def
+		return val
 	}
 
-	return env
+	return val
 }
 
-func EnvBool(key string, def bool) bool {
-	env, ok := os.LookupEnv(key)
+func EnvBool(key string, val bool) bool {
+	rawVal, ok := os.LookupEnv(key)
 	if !ok {
-		return def
+		return val
 	}
-	val, err := strconv.ParseBool(env)
+	val, err := strconv.ParseBool(rawVal)
 	if err != nil {
-		return def
+		return val
 	}
 
 	return val

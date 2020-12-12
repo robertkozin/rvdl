@@ -22,14 +22,6 @@ func FileExists(file string) bool {
 	return err == nil || os.IsExist(err)
 }
 
-func FullPath(u url.URL) string {
-	if u.RawQuery != "" {
-		return u.Path[1:] + "?" + u.RawPath
-	} else {
-		return u.Path[1:]
-	}
-}
-
 func UrlRawString(u *url.URL) string {
 	var buf strings.Builder
 

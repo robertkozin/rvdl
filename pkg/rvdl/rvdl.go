@@ -1,9 +1,9 @@
 package rvdl
 
 import (
-	"rvdl/pkg/cache"
-	"rvdl/pkg/reddit"
-	"rvdl/pkg/util"
+	"github.com/robertkozin/rvdl/pkg/cache"
+	"github.com/robertkozin/rvdl/pkg/reddit"
+	"github.com/robertkozin/rvdl/pkg/util"
 )
 
 var FfmpegPath = util.EnvString("RVDL_FFMPEG_PATH", "/bin/ffmpeg")
@@ -38,7 +38,7 @@ func Init() error {
 	}
 
 	urlToInfoCache = cache.NewLru(100)
-	idToInfoCache = cache.NewCache(100, CacheDir + "id_to_info")
+	idToInfoCache = cache.NewCache(100, CacheDir+"id_to_info")
 
 	return nil
 }

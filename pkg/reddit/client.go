@@ -2,10 +2,10 @@ package reddit
 
 import (
 	"errors"
+	"github.com/robertkozin/rvdl/pkg/util"
 	"github.com/segmentio/encoding/json"
 	"io"
 	"net/http"
-	"rvdl/pkg/util"
 )
 
 type Client interface {

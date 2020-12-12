@@ -1,11 +1,11 @@
 package server
 
 import (
+	"github.com/robertkozin/rvdl/pkg/rvdl"
+	"github.com/robertkozin/rvdl/pkg/util"
 	"net/http"
 	"net/url"
 	"os"
-	"rvdl/pkg/rvdl"
-	"rvdl/pkg/util"
 	"strings"
 	"time"
 )

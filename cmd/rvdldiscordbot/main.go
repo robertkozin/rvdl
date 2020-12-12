@@ -2,18 +2,17 @@ package main
 
 import (
 	"fmt"
+	"github.com/robertkozin/rvdl/internal/discordbot"
+	"github.com/robertkozin/rvdl/pkg/util"
 	"log"
 	"os"
 	"os/signal"
-	"rvdl/internal/discordbot"
-	"rvdl/pkg/util"
 	"syscall"
 )
 
 var DiscordToken = util.EnvString("RVDL_DISCORD_TOKEN", "")
 
 func main() {
-
 
 	go func() {
 		if _, err := discordbot.SetupDiscord(DiscordToken); err != nil {
@@ -28,7 +27,6 @@ func main() {
 	<-done
 
 	fmt.Println("Discord Bot Stopped")
-
 
 	err := discordbot.TeardownDiscord()
 	if err != nil {

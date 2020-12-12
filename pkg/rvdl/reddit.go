@@ -2,7 +2,7 @@ package rvdl
 
 import (
 	"errors"
-	"rvdl/pkg/reddit"
+	"github.com/robertkozin/rvdl/pkg/reddit"
 )
 
 // TODO: Probably just move info info.go

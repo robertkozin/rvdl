@@ -2,10 +2,10 @@ package server
 
 import (
 	"fmt"
+	"github.com/robertkozin/rvdl/pkg/util"
 	"log"
 	"net/http"
 	"net/url"
-	"rvdl/pkg/util"
 )
 
 var isTesting = util.EnvBool("RVDL_TESTING", false)

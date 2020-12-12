@@ -3,8 +3,8 @@ package rvdl
 import (
 	"bytes"
 	"fmt"
+	"github.com/robertkozin/rvdl/pkg/util"
 	"os/exec"
-	"rvdl/pkg/util"
 	"sync"
 )
 

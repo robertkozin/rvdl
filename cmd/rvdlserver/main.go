@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/robertkozin/rvdl/internal/server"
+	"github.com/robertkozin/rvdl/pkg/rvdl"
+	"github.com/robertkozin/rvdl/pkg/util"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
-	"rvdl/internal/server"
-	"rvdl/pkg/rvdl"
-	"rvdl/pkg/util"
 	"syscall"
 	"time"
 )
@@ -19,12 +19,12 @@ var Address = util.EnvString("RVDL_ADDRESS", "")
 func main() {
 	err := rvdl.Init()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 
 	srv := &http.Server{
-		Addr: Address,
+		Addr:    Address,
 		Handler: http.HandlerFunc(server.ServeHTTP),
 	}
 
@@ -34,7 +34,7 @@ func main() {
 		}
 	}()
 
-	fmt.Println("Server Started")
+	log.Println("Server Started")
 
 	done := make(chan os.Signal)
 	signal.Notify(done, os.Interrupt, syscall.SIGTERM)
@@ -43,15 +43,11 @@ func main() {
 	fmt.Println("Server Stopped")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer func() {
-		// extra handling here
-		cancel()
-	}()
+	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalf("Server Shutdown Failed:%+v", err)
+		log.Printf("Server Shutdown Failed:%+v", err)
 	}
-	log.Print("Server Exited Properly")
 
 	rvdl.Close()
 }

@@ -107,7 +107,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		_, _ = io.Copy(ioutil.Discard, res.Body)
 		_ = res.Body.Close()
 
-		if (res.StatusCode != http.StatusOK && res.StatusCode != http.StatusNotModified) || res.Header.Get("Content-Type") != "video/mp4" {
+		if res.Header.Get("Video-Found") != "?1" {
 			return
 		}
 

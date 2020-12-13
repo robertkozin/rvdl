@@ -36,18 +36,17 @@ func handleRvdl(res http.ResponseWriter, req *http.Request) {
 
 	id := rvdl.FindIdCache(u)
 	if id.IdType == rvdl.VideoIdNone {
-		http.NotFound(res, req)
 		return
 	}
 
 	info, err := rvdl.InfoFromIdCache(id)
 	if err != nil {
-		http.Error(res, err.Error(), 500)
+		http.ServeFile(res, req, "./web/static/500_server_error.mp4")
 		return
 	}
 
 	if info.VideoType == rvdl.VideoTypeNone {
-		http.NotFound(res, req)
+		http.ServeFile(res, req, "./web/static/404_video_not_found.mp4")
 		return
 	}
 
@@ -60,10 +59,11 @@ func handleRvdl(res http.ResponseWriter, req *http.Request) {
 	filename, err := rvdl.DownloadCache(info)
 	if err != nil {
 		// TODO: figure out error types
-		http.Error(res, err.Error(), 500)
+		http.ServeFile(res, req, "./web/static/500_server_error.mp4")
 		return
 	}
 
+	res.Header().Set("Video-Found", "?1")
 	res.Header().Set("Cache-Control", "public, max-age=31536000")
 	res.Header().Set("Content-Type", "video/mp4")
 

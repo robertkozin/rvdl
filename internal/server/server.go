@@ -47,6 +47,8 @@ func ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	default:
 		handleRvdl(res, req)
 	}
+
+	http.NotFound(res, req)
 }
 
 func home(res http.ResponseWriter, req *http.Request) {

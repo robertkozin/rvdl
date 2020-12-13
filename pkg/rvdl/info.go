@@ -30,7 +30,7 @@ func InfoFromIdCache(id *VideoId) (*VideoInfo, error) {
 	}
 
 	idToInfoCache.Put(idString, info)
-	urlToInfoCache.Put(info.Permalink, info)
+	urlToInfoCache.Put(info.Permalink, info.VideoId)
 
 	return info, nil
 }

@@ -44,6 +44,8 @@ func ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		home(res, req)
 	case "/favicon.ico":
 		favicon(res, req)
+	case "/robots.txt":
+		robots(res, req)
 	default:
 		handleRvdl(res, req)
 	}
@@ -64,4 +66,10 @@ func home(res http.ResponseWriter, req *http.Request) {
 func favicon(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Cache-Control", "public, max-age=86400")
 	res.WriteHeader(http.StatusNoContent)
+}
+
+func robots(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Cache-Control", "public, max-age=604800")
+	res.Header().Set("Content-Type", "text/plain")
+	http.ServeFile(res, req, "web/static/robots.txt")
 }

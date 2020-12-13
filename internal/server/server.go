@@ -50,11 +50,12 @@ func ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		handleRvdl(res, req)
 	}
 
+	res.Header().Set("Cache-Control", "public, max-age=604800")
 	http.NotFound(res, req)
 }
 
 func home(res http.ResponseWriter, req *http.Request) {
-	res.Header().Set("Cache-Control", "public, max-age=86400")
+	res.Header().Set("Cache-Control", "public, max-age=86400, s-max-age=31536000")
 	//if req.URL.Host != "redditvideodownload.com" {
 	//	redirect(res, req, "https://redditvideodownload.com/", http.StatusFound)
 	//	return
@@ -64,12 +65,12 @@ func home(res http.ResponseWriter, req *http.Request) {
 }
 
 func favicon(res http.ResponseWriter, req *http.Request) {
-	res.Header().Set("Cache-Control", "public, max-age=86400")
+	res.Header().Set("Cache-Control", "public, max-age=604800, s-max-age=31536000")
 	res.WriteHeader(http.StatusNoContent)
 }
 
 func robots(res http.ResponseWriter, req *http.Request) {
-	res.Header().Set("Cache-Control", "public, max-age=604800")
+	res.Header().Set("Cache-Control", "public, max-age=604800, s-max-age=31536000")
 	res.Header().Set("Content-Type", "text/plain")
 	http.ServeFile(res, req, "web/static/robots.txt")
 }

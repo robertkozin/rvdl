@@ -7,7 +7,7 @@ import (
 )
 
 var FfmpegPath = util.EnvString("RVDL_FFMPEG_PATH", "/bin/ffmpeg")
-var VideosDir = util.EnvString("RVDL_VIDEOS_DIR", "./web/static/videos/")
+var VideosDir = util.EnvString("RVDL_VIDEOS_DIR", "./videos/")
 
 var Domain = util.EnvString("RVDL_DOMAIN", "rvdl.com")
 var ShortDomain = util.EnvString("RVDL_SHORT_DOMAIN", "rvdl.it")

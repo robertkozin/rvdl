@@ -7,7 +7,7 @@ import (
 
 var matches = []match{
 	makeMatch(`v.redd\.it/([0-9a-z]+)`, VideoIdRedditVideo),
-	makeMatch(`(preview|i).redd\.it/([0-9a-z]+)\.gif`, VideoIdRedditGif),
+	makeMatch(`(?:preview|i).redd\.it/([0-9a-z]+)\.gif`, VideoIdRedditGif),
 	makeMatch(`reddit\.com/(?:r|u|user)/\S{2,}/comments/([0-9a-z]+)`, VideoIdRedditPost),
 	makeMatch(`reddit\.com/comments/([0-9a-z]+)`, VideoIdRedditPost),
 	makeMatch(`reddit\.com/([0-9a-z]+)`, VideoIdRedditPost),

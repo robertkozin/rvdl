@@ -1,20 +1,11 @@
 package reddit
 
 import (
-	"net/http"
 	"net/url"
 	"strings"
 )
 
 type V map[string]string
-
-func (v V) Headers() http.Header {
-	h := make(http.Header, len(v))
-	for k, v := range v {
-		h[k] = []string{v}
-	}
-	return h
-}
 
 func (v V) Encode() string {
 	return v.encode(false)

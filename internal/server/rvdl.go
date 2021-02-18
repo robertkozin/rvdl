@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"github.com/robertkozin/rvdl/pkg/rvdl"
 	"github.com/robertkozin/rvdl/pkg/util"
 	"net/http"
@@ -36,18 +37,23 @@ func handleRvdl(res http.ResponseWriter, req *http.Request) {
 
 	id := rvdl.FindIdCache(u)
 	if id.IdType == rvdl.VideoIdNone {
-		res.Header().Set("Cache-Control", "public, max-age=2678400")
+		fmt.Println("404")
+		//res.Header().Set("Cache-Control", "public, max-age=2678400")
+		res.Header().Set("Cache-Control", "public, max-age=604800")
+		http.NotFound(res, req)
 		return
 	}
 
 	info, err := rvdl.InfoFromIdCache(id)
 	if err != nil {
+		fmt.Println(err)
 		res.Header().Set("Cache-Control", "public, max-age=86400")
 		http.ServeFile(res, req, "./web/static/500_server_error.mp4")
 		return
 	}
 
 	if info.VideoType == rvdl.VideoTypeNone {
+		fmt.Println("404")
 		res.Header().Set("Cache-Control", "public, max-age=604800")
 		http.ServeFile(res, req, "./web/static/404_video_not_found.mp4")
 		return
@@ -56,12 +62,14 @@ func handleRvdl(res http.ResponseWriter, req *http.Request) {
 	if info.Permalink != reqUrl {
 		res.Header().Set("Cache-Control", "public, max-age=604800")
 		redirect(res, req, info.Permalink, http.StatusFound)
+		// TODO: Preserve download query
 		// TODO: maybe start download
 		return
 	}
 
 	filename, err := rvdl.DownloadCache(info)
 	if err != nil {
+		fmt.Println(err)
 		res.Header().Set("Cache-Control", "public, max-age=86400")
 		// TODO: figure out error types
 		http.ServeFile(res, req, "./web/static/500_server_error.mp4")

@@ -19,10 +19,24 @@ type PrivateClient struct {
 
 	refreshError error
 	accessToken  string
+	accessTokenExpiry int
+
+	httpClient *http.Client
 }
 
 func NewPrivateClient(clientId string, clientSecret string, username string, password string, userAgent string) (Client, error) {
-	client := &PrivateClient{clientId: clientId, clientSecret: clientSecret, Username: username, password: password, UserAgent: userAgent}
+	client := &PrivateClient{
+		clientId: clientId,
+		clientSecret: clientSecret,
+		Username: username,
+		password: password,
+		UserAgent: userAgent,
+		httpClient: &http.Client{},
+	}
+
+	//accessToken := os.Getenv("RVDL_REDDIT_ACCESS_TOKEN")
+	//accessTokenExpiry := os.Getenv("RVDL_REDDIT_ACCESS_TOKEN_EXPIRY")
+
 
 	client.refresh()
 	if client.refreshError != nil {
@@ -34,6 +48,9 @@ func NewPrivateClient(clientId string, clientSecret string, username string, pas
 			client.refresh()
 		}
 	}()
+
+
+	//os.Setenv()
 
 	return client, nil
 }
@@ -53,7 +70,7 @@ func (c *PrivateClient) refresh() {
 
 	var res accessTokenResponse
 
-	err := do(http.MethodPost, refreshEndpoint, headers, data.EncodeReader(), &res)
+	err := do(c.httpClient, http.MethodPost, refreshEndpoint, headers, data.EncodeReader(), &res)
 	if err != nil {
 		c.refreshError = err
 		return
@@ -76,8 +93,13 @@ func (c *PrivateClient) Get(url string, data V, response interface{}) error {
 		"Authorization": {"bearer " + c.accessToken},
 	}
 
-	return do(http.MethodGet, privateEndpoint+url+data.Query(), headers, nil, response)
+	return do(c.httpClient, http.MethodGet, privateEndpoint+url+data.Query(), headers, nil, response)
 }
+
+func (c *PrivateClient) GetListing(url string, data V, response interface{}) error {
+	return getListing(c, url, data, response)
+}
+
 
 func (c *PrivateClient) Post(url string, data V, response interface{}) error {
 	if c.refreshError != nil {
@@ -92,7 +114,7 @@ func (c *PrivateClient) Post(url string, data V, response interface{}) error {
 		"Content-Type":  {"application/x-www-form-urlencoded"},
 	}
 
-	return do(http.MethodPost, privateEndpoint+url, headers, data.EncodeReader(), response)
+	return do(c.httpClient, http.MethodPost, privateEndpoint+url, headers, data.EncodeReader(), response)
 }
 
 type accessTokenResponse struct {

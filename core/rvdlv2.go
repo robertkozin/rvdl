@@ -7,11 +7,11 @@ import (
 )
 
 type Rvdl struct {
-	config RvdlConfig
-	locker *locker.Locker
+	config   RvdlConfig
+	locker   *locker.Locker
 	urlCache *cache.LRU
-	idCache *cache.Cache
-	reddit *reddit.Client
+	idCache  *cache.Cache
+	reddit   *reddit.Client
 }
 
 type RvdlConfig struct {

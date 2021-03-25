@@ -9,8 +9,12 @@ import (
 var FfmpegPath = util.EnvString("RVDL_FFMPEG_PATH", "/bin/ffmpeg")
 var VideosDir = util.EnvString("RVDL_VIDEOS_DIR", "./videos/")
 
-var Domain = util.EnvString("RVDL_DOMAIN", "rvdl.com")
-var ShortDomain = util.EnvString("RVDL_SHORT_DOMAIN", "rvdl.it")
+var IsDev = util.EnvBool("RVDL_IS_DEV", true)
+var DefaultDomain = util.IifString(IsDev, "rvdl-dev.com", "rvdl.com")
+var DefaultShortDomain = util.IifString(IsDev, "rvdl-dev.it", "rvdl.it")
+
+var Domain = util.EnvString("RVDL_DOMAIN", DefaultDomain)
+var ShortDomain = util.EnvString("RVDL_SHORT_DOMAIN", DefaultShortDomain)
 
 var CacheDir = util.EnvString("RVDL_CACHE_DIR", "./cache/")
 

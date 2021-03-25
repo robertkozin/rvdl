@@ -36,3 +36,11 @@ func UrlRawString(u *url.URL) string {
 
 	return buf.String()
 }
+
+func IifString(cond bool, a string, b string) string {
+	if cond {
+		return a
+	} else {
+		return b
+	}
+}

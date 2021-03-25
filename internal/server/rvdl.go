@@ -11,6 +11,13 @@ import (
 	"time"
 )
 
+var IsDev = util.EnvBool("RVDL_IS_DEV", true)
+var DefaultDomain = util.IifString(IsDev, "rvdl-dev.com", "rvdl.com")
+var DefaultShortDomain = util.IifString(IsDev, "rvdl-dev.it", "rvdl.it")
+
+var Domain = util.EnvString("RVDL_DOMAIN", DefaultDomain)
+var ShortDomain = util.EnvString("RVDL_SHORT_DOMAIN", DefaultShortDomain)
+
 var lastModified = "Tue, 01 Dec 2020 00:00:00 GMT"
 var lastModifiedTime, _ = time.Parse("Mon, 02 Jan 2006 15:04:05 GMT", lastModified)
 
@@ -22,8 +29,8 @@ func ProcessUrl(u url.URL) string {
 			return u.Path
 		}
 	} else {
-		u.Host = strings.Replace(u.Host, "rvdl.com", "reddit.com", 1)
-		u.Host = strings.Replace(u.Host, "rvdl.it", "redd.it", 1)
+		u.Host = strings.Replace(u.Host, Domain, "reddit.com", 1)
+		u.Host = strings.Replace(u.Host, ShortDomain, "redd.it", 1)
 		return u.String()
 	}
 }
@@ -61,7 +68,7 @@ func handleRvdl(res http.ResponseWriter, req *http.Request) {
 
 	if info.Permalink != reqUrl {
 		res.Header().Set("Cache-Control", "public, max-age=604800")
-		redirect(res, req, info.Permalink, http.StatusFound)
+		http.Redirect(res, req, info.Permalink, http.StatusFound)
 		// TODO: Preserve download query
 		// TODO: maybe start download
 		return

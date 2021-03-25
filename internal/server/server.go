@@ -1,42 +1,12 @@
 package server
 
 import (
-	"fmt"
-	"github.com/robertkozin/rvdl/pkg/util"
 	"log"
 	"net/http"
-	"net/url"
 )
 
-var isTesting = util.EnvBool("RVDL_TESTING", false)
-
-// TODO: There has to be a better way to do this
-func redirect(res http.ResponseWriter, req *http.Request, url string, code int) {
-	if isTesting {
-		http.Redirect(res, req, "https://"+req.Host+"/"+url, code)
-	} else {
-		http.Redirect(res, req, url, code)
-	}
-}
-
-// TODO: There has to be a better way to do this
-func transform(res http.ResponseWriter, req *http.Request) {
-	if isTesting {
-		u, err := url.Parse(req.URL.String()[1:])
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		req.URL = u
-	} else {
-		req.URL.Scheme = "https"
-		req.URL.Host = req.Host
-	}
-}
 
 func ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	transform(res, req)
-
 	log.Printf("%s %s", req.Method, req.URL)
 
 	switch req.URL.Path {
@@ -67,7 +37,7 @@ func favicon(res http.ResponseWriter, req *http.Request) {
 	case "/favicon.ico":
 		res.Header().Set("Content-Type", "image/x-icon")
 		http.ServeFile(res, req, "./web/static/favicon.ico")
-	case "apple-touch-icon.png":
+	case "/apple-touch-icon.png":
 		res.Header().Set("Content-Type", "image/png")
 		http.ServeFile(res, req, "./web/static/apple-touch-icon.png")
 	}

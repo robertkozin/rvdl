@@ -1,4 +1,4 @@
-package discord
+package discordbot
 
 import (
 	"github.com/bwmarrin/discordgo"

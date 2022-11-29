@@ -56,6 +56,10 @@ type RedditPost struct {
 	Permalink string `json:"permalink"`
 	Media     struct {
 		RedditVideo RedditVideo `json:"reddit_video"`
+		OEmbed      struct {
+			ProviderName string `json:"provider_name"` // Gfycat, RedGIFs
+			ThumbnailUrl string `json:"thumbnail_url"` // https://giant.gfycat.com/{{name}}.mp4, // https://\S+/([a-zA-Z]+)
+		} `json:"oembed"`
 	} `json:"secure_media"`
 	Preview struct {
 		RedditVideoPreview RedditVideo `json:"reddit_video_preview"`
